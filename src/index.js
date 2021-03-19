@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import GDebugger from './gdebugger';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -11,7 +11,26 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// 临时设置，需要抽象
+let ready = false;
+const init = (options = {}) => {
+  if (!ready) {
+    // 创建mdebug节点
+    const { containerId } = options;
+    const gdebuggerContainerId = containerId || `gdebugger${parseInt(Math.random() * Number.MAX_SAFE_INTEGER, 10)}`;
+    const gdebuggerRoot = document.createElement('div');
+    gdebuggerRoot.id = gdebuggerContainerId;
+    document.body.appendChild(gdebuggerRoot);
+
+    // 渲染mdebug
+    ReactDOM.render(
+      <GDebugger options={options} />,
+      document.getElementById(gdebuggerContainerId)
+    );
+    ready = true;
+  } else {
+    console.warn('gdebugger has inited!');
+  }
+}
+
+init();
